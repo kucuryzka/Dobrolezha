@@ -1,106 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace lab3;
 
-namespace ConsoleApplication8
+class Program
 {
-    class Program
-    {
-        static void task1()
-        {
-            int n = int.Parse(Console.ReadLine());
+    static int task1(){
+         int n = int.Parse(Console.ReadLine());
 
-            int count = 0;
-            int maxCount = 0;
+        int count = 0;
+        for (int i = 0; i < n; i++){
+            int num = int.Parse(Console.ReadLine());
+            int summ = 0;
 
-            for (int i = 0; i < n; i++)
+            while (num / 10 != 0)
             {
-                int num = int.Parse(Console.ReadLine());
-                if (num % 2 == 0)
+                summ += num % 10;
+                num /= 10;
+            }
+            summ += num % 10;
+
+            if (summ % 2 == 0)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
+    static int task2(){
+         int n = int.Parse(Console.ReadLine());
+
+        int count = 0;
+        for (int i = 0; i < n; i++){
+            int num = int.Parse(Console.ReadLine());
+            int odd = 0;
+            int even = 0;
+
+            while (num / 10 != 0){
+                if (num % 10 % 2 == 0)
                 {
-                    count++;
+                    odd++;
                 }
                 else
                 {
-                    maxCount = Math.Max(maxCount, count);
-                    count = 0;
+                    even++;
                 }
+                num /= 10;
             }
 
-
-            //дз 2
-            static void task2()
-            {
-                int n = int.Parse(Console.ReadLine());
-
-                int count = 0;
-                int length = 0;
-                int currSum = 0;
-                int maxSum = 0;
-
-                for (int i = 0; i < n; i++)
-                {
-                    int num = int.Parse(Console.ReadLine());
-
-                    if (num % 2 == 0)
-                    {
-                        currSum += num;
-                        count++;
-                    }
-                    else
-                    {
-                        length = (currSum > maxSum) ? count : length;
-                        maxSum = Math.Max(maxSum, currSum);
-                        currSum = 0;
-                        count = 0;
-
-                    }
-                }
-
-                Console.WriteLine(length);
+            if (num % 10 % 2 == 0){
+                odd++;
+            }
+            else{
+                even++;
             }
 
-
-            //дз3
-            static void task3()
-            {
-                int n = int.Parse(Console.ReadLine());
-
-                int curr = int.Parse(Console.ReadLine());
-                int next;
-
-                int count = 1;
-                int minLen = 9999;
-
-                for (int i = 0; i < n - 1; i++)
-                {
-                    next = int.Parse(Console.ReadLine());
-
-                    if (next == curr)
-                    {
-                        count++;
-                    }
-                    else
-                    {
-                        minLen = Math.Min(minLen, count);
-                        count = 1;
-                    }
-
-                    curr = next;
-
-                }
-                minLen = Math.Min(minLen, count);
-                Console.WriteLine(minLen);
+            if (odd > even){
+                count++;
             }
-            static void Main(string[] args)
-            {
-                task1();
-                task2();
-                task3();
-            }
+
         }
+
+        return count;
+
+    }
+
+
+    static void Main(string[] args)
+    {
+        System.Console.WriteLine(task2());
+
     }
 }
