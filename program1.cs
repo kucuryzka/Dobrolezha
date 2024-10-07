@@ -18,7 +18,7 @@ namespace ConsoleApplication8
 
             for (int i = 0; i < n; i++)
             {
-                int num = int.Parse(Console.ReadLine());
+                int num = Math.Abs(int.Parse(Console.ReadLine()));
                 if (num % 2 == 0)
                 {
                     count++;
@@ -43,7 +43,7 @@ namespace ConsoleApplication8
 
                 for (int i = 0; i < n; i++)
                 {
-                    int num = int.Parse(Console.ReadLine());
+                    int num = Math.Abs(int.Parse(Console.ReadLine()));
 
                     if (num % 2 == 0)
                     {
