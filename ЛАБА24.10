@@ -1,100 +1,189 @@
-namespace lab2410;
 using System;
-using System.Net;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 
-class Program
+namespace ConsoleApplication8
 {
-
-    static void PrintArr(int[,] arr, int m, int n)
+    class Program
     {
-        for(int i = 0; i < m; i++)
-       {
-            for(int j = 0; j < n; j++)
-            {
-                Console.Write(arr[i, j] + " ");
-            }
-            Console.WriteLine("");
-       }
-    }
-
-
-    static int SumColumn(int[,] arr, int m, int num)
-    {   
-        int sum = 0;
-        for (int i = 0; i < m; i++)
+        static void PrintArr(int[,] arr, int m, int n)
         {
-            sum += arr[i, num];
-        }
-        return sum;
-    }
-
-
-    static void SwapColumns(int[,] arr, int m, int num)
-    {
-        for (int i = 0; i < m; i++)
-        {
-            int a = arr[i, num];
-            int b = arr[i, num + 1];
-
-            arr[i, num] = b;
-            arr[i, num + 1] = a;
-        }
-    }
-
-
-    static void Main(string[] args)
-    {
-        //объявление входных данных
-       int m = int.Parse(Console.ReadLine());
-       int n = int.Parse(Console.ReadLine());
-
-       int[,] arr = new int[m, n];
-
-        //считывание массива
-       for(int i = 0; i < m; i++)
-       {
-            for(int j = 0; j < n; j++)
+            for (int i = 0; i < m; i++)
             {
-                arr[i, j] = int.Parse(Console.ReadLine());
-            }
-       }
-
-
-       
-
-       System.Console.WriteLine("Исходный массив:");
-       PrintArr(arr, m, n);
-
-        //ЗАДАНИЕ 1
-       //нахождение суммы каждого столбца
-       int[] columnSums = new int[n];
-       for (int i = 0; i < n; i++)
-       {
-        int summa = SumColumn(arr, m, i);
-        columnSums[i] = summa;
-       }
-
-        //сортировка столбцов
-       for (int i = 0; i < n; i++)
-       {
-        for (int j = 0; j < n - i - 1; j++)
-        {
-            if (columnSums[j] > columnSums[j + 1])
-            {
-                SwapColumns(arr, m, j);
-                int temp = columnSums[j + 1];
-
-                columnSums[j + 1] = columnSums[j];
-                columnSums[j] = temp;
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(arr[i, j] + " ");
+                }
+                Console.WriteLine("");
             }
         }
-       }
-
-       System.Console.WriteLine("Массив, отсортированный по сумме столбцов:");
-       PrintArr(arr, m, n);
 
 
-       //ЗАДАНИЕ 2
-       
+        static int SumColumn(int[,] arr, int m, int num)
+        {
+            int sum = 0;
+            for (int i = 0; i < m; i++)
+            {
+                sum += arr[i, num];
+            }
+            return sum;
+        }
+
+
+        static void SwapColumns(int[,] arr, int m, int num)
+        {
+            for (int i = 0; i < m; i++)
+            {
+                int a = arr[i, num];
+                int b = arr[i, num + 1];
+
+                arr[i, num] = b;
+                arr[i, num + 1] = a;
+            }
+        }
+
+
+        static int SumRow(int[,] arr, int num, int n)
+        {
+            int summ = 0;
+            for (int i = 0; i < n; i++)
+            {
+                summ += arr[num, i];
+            }
+            return summ;
+        }
+
+
+        static int PowRow(int[,] arr, int num, int n)
+        {
+            int summ = 1;
+            for (int i = 0; i < n; i++)
+            {
+                summ *= arr[num, i];
+            }
+            return summ;
+        }
+
+
+        static int ZeroCount(int[,] arr, int num, int n)
+        {
+            int count = 0;
+            for (int i = 0; i < n; i++)
+            {
+                if (arr[num, i] == 0)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+
+        static void Main(string[] args)
+        {
+            //объявление входных данных
+            int m = int.Parse(Console.ReadLine());
+            int n = int.Parse(Console.ReadLine());
+
+            int[,] arr = new int[m, n];
+
+            //считывание массива
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    arr[i, j] = int.Parse(Console.ReadLine());
+                }
+            }
+
+
+
+
+            System.Console.WriteLine("Исходный массив:");
+            PrintArr(arr, m, n);
+
+            //ЗАДАНИЕ 1
+            //нахождение суммы каждого столбца
+            int[] columnSums = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                int summa = SumColumn(arr, m, i);
+                columnSums[i] = summa;
+            }
+
+            //сортировка столбцов
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n - i - 1; j++)
+                {
+                    if (columnSums[j] > columnSums[j + 1])
+                    {
+                        SwapColumns(arr, m, j);
+                        int temp = columnSums[j + 1];
+
+                        columnSums[j + 1] = columnSums[j];
+                        columnSums[j] = temp;
+                    }
+                }
+            }
+
+            System.Console.WriteLine("Массив, отсортированный по сумме столбцов:");
+            PrintArr(arr, m, n);
+
+
+            //ЗАДАНИЕ 2
+            Console.WriteLine("Пары строк с одинаковыми элементами:");
+            for (int i = 0; i < m; i++)
+            {   
+                int rowSum = SumRow(arr, i, n);
+                int rowPow = PowRow(arr, i, n);
+                int rowZero = ZeroCount(arr, i, n);
+                for (int j = i + 1; j < n; j++)
+                {
+                    int rowSum2 = SumRow(arr, j, n);
+                    int rowPow2 = PowRow(arr, j, n);
+                    int rowZero2 = ZeroCount(arr, j, n);
+
+                    if (rowSum == rowSum2 && rowPow == rowPow2 && rowZero == rowZero2)
+                    {
+                        Console.WriteLine($"{i + 1}-{j + 1}");
+                    }
+                }
+            }
+
+
+            //ЗАДАНИЕ 3
+            Console.WriteLine("Положение элементов минимакса:");
+            int[] mins = new int[m];
+            for (int i = 0; i <  m; i++)
+            {
+                int curMin = 99999;
+                for (int j = 0; j < n; j++)
+                {
+                    if (arr[i, j] < curMin)
+                    {
+                        curMin = arr[i, j];
+                    }
+                }
+                mins[i] = curMin;
+            }
+
+            int miniMax = mins.Max();
+
+            for (int i = 0;i < m; i++)
+            {
+                for (int j = 0;j < n; j++)
+                {
+                    if (arr[i, j] == miniMax)
+                    {
+                        Console.WriteLine($"({i + 1},{j + 1})");
+                    }
+                }
+            }
+        }
     }
 }
+
