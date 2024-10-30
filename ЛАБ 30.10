@@ -1,0 +1,79 @@
+namespace lab2410;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+
+class Program
+{
+
+
+    static void Main(string[] args)
+    {
+        int[][] arr = new int[4][];
+        int[] arrLen = new int[4];
+        int[] arrRowSum = new int[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            int n = int.Parse(Console.ReadLine());
+            arr[i] = new int[n];
+            arrLen[i] = n;
+            int rowSum = 0;
+            for (int j = 0; j < n; j++)
+            {   
+                int el = int.Parse(Console.ReadLine());
+                arr[i][j] = el;
+                rowSum += el;
+            }
+
+            arrRowSum[i] = rowSum;
+        }
+
+        //ЗАДАНИЕ 1
+        for (int i = 0; i < 4; i++)
+        {
+            int countOdd = 0;
+            int countEven = 0;
+
+            for (int j = 0; j < arrLen[i]; j++)
+            {
+                if (arr[i][j] % 2 == 0)
+                {
+                    countEven++;
+                }
+                else
+                {
+                    countOdd++;
+                }
+            }
+
+            System.Console.WriteLine($"Строка {i + 1}: четных - {countEven}, нечетных - {countOdd}");
+        }
+
+
+        //ЗАДАНИЕ 2
+        for (int i = 0; i < 4; i++)
+        {
+            int elem = -9999;
+            int elemI = -1;
+            int elemJ = -1;
+            for (int j = 0; j < arrLen[i]; j++)
+            {
+                if (arrRowSum[i] - arr[i][j] < arr[i][j] && elem < arr[i][j])
+                {
+                    elem = arr[i][j];
+                    elemI = i;
+                    elemJ = j;
+                }
+            }
+            if (elem != -9999)
+            {
+                System.Console.WriteLine($"Положение элемента для {i + 1} строки: {elemJ + 1}");
+            }
+            else
+            {
+                System.Console.WriteLine($"В строке {i + 1} нет такого элемента");
+            }
+        }
+    }
+}
