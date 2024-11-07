@@ -1,0 +1,89 @@
+using System;
+using System.Xml.XPath;
+public class HelloWorld
+{
+
+    static public void Task1(string str)
+    {
+        string[] result = str.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        System.Console.WriteLine(string.Join(' ', result));
+    }
+
+
+    static public void Task2(string str)
+    {
+        string[] arr = str.Split(" ");
+
+        foreach (string el in arr)
+        {
+            string reversed = "";
+            for (int i = el.Length - 1; i >= 0; i--)
+            {
+                reversed += el[i];
+            }
+            if (el.Equals(reversed))
+            {
+                System.Console.WriteLine(el);
+            }
+        }
+    }
+
+
+    public static void Task3(string str)
+    {
+        string reversed = "";
+            for (int i = str.Length - 1; i >= 0; i--)
+            {
+                reversed += str[i];
+            }
+            if (str.Equals(reversed))
+            {
+                System.Console.WriteLine("ПАЛИНДРОМ");
+            }
+            else
+            {
+                System.Console.WriteLine("НЕ ПАЛИНДРОМ");
+            }
+    }
+
+
+    public static void Task4(int n)
+    {
+        string vows = "eyuioa";
+        string cons = "qwrtpsdfghjklzxcvbnm";
+
+        for (int i = 0; i < n; i++)
+        {
+            string str = Console.ReadLine();
+
+            int countVows = 0;
+            int countCons = 0;
+            for (int j = 0; j < str.Length; j++)
+            {
+                if (vows.Contains(str[j]))
+                {
+                    countVows++;
+                }
+                if (cons.Contains(str[j]))
+                {
+                    countCons++;
+                }
+            }
+
+            if (countVows > countCons)
+            {
+                System.Console.WriteLine(str);
+            }
+        }
+    }
+
+
+    static public void Main ()
+    {
+
+        
+        Task4(3);
+
+    }
+}
