@@ -1,0 +1,49 @@
+namespace lab2111;
+
+
+class Program
+{
+    public static string ReplaceLetters1(string s)
+    {
+        string letters = "qwertyuiopsdfghjklzxvnm";
+        string res = s;
+
+        foreach(char letter in letters)
+        {
+            s = s.Replace(letter, '*');
+            System.Console.WriteLine(s);
+        }
+
+        return res;
+    }
+    static void Main(string[] args)
+    {
+        string s = Console.ReadLine();
+        string letters = "qwertyuiopsdfghjklzxvnm";
+
+        int count = 0;
+        while (s != "")
+        {
+            foreach(char letter in letters)
+            {
+                s = s.Replace(letter, '*');
+            }
+            
+            if (s.Contains("a*b") || s.Contains("acb")) count++;
+
+            string example = "abc";
+            string sub = "";
+            int len = 0;
+            while (s.Contains(sub))
+            {
+                sub += example[sub.Length % 3];
+                len++;
+            }
+            System.Console.WriteLine($"максимальная длина требуемой подстроки: {len - 1}");
+
+            s = Console.ReadLine();
+        }
+
+        System.Console.WriteLine($"количество строк, удовлетворяющих условию задания 1: {count}");
+    }
+}
