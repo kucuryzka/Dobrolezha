@@ -1,0 +1,46 @@
+namespace lab2111;
+
+
+class Program
+{
+    
+    public static ulong Func(uint n, ulong[] arr)
+    {
+        
+        if (n == 3) return 1;
+        if (n < 3) return  0;
+
+        if (n > 3)
+        {
+            if (arr[n] == 0)
+            {
+                if (n % 2 == 0)
+                {
+                    arr[n] = Func(n / 2, arr) + Func(n / 2, arr);
+                    return arr[n];
+                }
+                else
+                {
+                    arr[n] = Func(n / 2, arr) + Func((n / 2) + 1, arr);
+                    return arr[n];
+                }
+            }
+            else
+            {
+                return arr[n];
+            }
+        }
+
+        return 0;
+    }
+
+
+    static void Main(string[] args)
+    {
+        uint n = uint.Parse(Console.ReadLine());
+
+        ulong[] arr = new ulong[n + 1];
+        
+        System.Console.WriteLine(Func(n, arr));
+    }
+}
