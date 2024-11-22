@@ -1,0 +1,90 @@
+using System.Linq.Expressions;
+
+namespace lab2111;
+
+
+class Program
+{
+    
+    public static ulong Func(uint n, ulong[] arr)
+    {
+        
+        if (n == 3) return 1;
+        if (n < 3) return  0;
+
+        if (n > 3)
+        {
+            if (arr[n] == 0)
+            {
+                if (n % 2 == 0)
+                {
+                    arr[n] = Func(n / 2, arr) + Func(n / 2, arr);
+                    return arr[n];
+                }
+                else
+                {
+                    arr[n] = Func(n / 2, arr) + Func((n / 2) + 1, arr);
+                    return arr[n];
+                }
+            }
+            else
+            {
+                return arr[n];
+            }
+        }
+
+        return 0;
+    }
+
+
+    static void Main(string[] args)
+    {
+        string s  = Console.ReadLine();
+        int current_action = 1;
+
+        string[] results = new string[256];
+        while (s != "")
+        {
+            string[] arr = s.Split(" ");
+            string start, end;
+            if (arr[0] == "MIX")
+            {
+                start = "MX"; end = "XM";
+            }
+            else if (arr[0] == "WATER")
+            {
+                start = "WT"; end = "TW";
+            }
+            else if (arr[0] == "DUST")
+            {
+                start = "DT"; end = "TD";
+            }
+            else
+            {
+                start = "FR"; end = "RF";
+            }
+            
+            string res = "";
+            for (int i = 1; i < arr.Length; i++)
+            {
+                int num = 0;
+                if (int.TryParse(arr[i], out num))
+                {
+                    res += results[num];
+                }
+                else
+                {
+                    res += arr[i];
+                }
+            }
+
+            string res2 = $"{start}{res}{end}";
+            results[current_action] = res2;
+            current_action++;
+
+            s = Console.ReadLine();
+        }
+
+        System.Console.WriteLine(results[current_action - 1]);
+    }
+}
