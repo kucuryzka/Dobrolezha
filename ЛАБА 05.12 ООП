@@ -1,0 +1,136 @@
+using System.Collections.Specialized;
+using System.Linq.Expressions;
+
+namespace lab2111;
+
+
+class Student(string name, string birthYear, string adress, string motherName = "-", string fatherName = "-")
+{
+    public string[] name = name.Split();
+    string birthYear = birthYear;
+    string motherName = motherName;
+    string fatherName = fatherName;
+    string[] adress = adress.Split(',');
+
+    public void ShowInfo()
+    {
+        System.Console.WriteLine($"ФИО:{name}, год рождения: {birthYear}, адрес: {adress}, ФИО родителей: {motherName}, {fatherName}");
+    }
+
+    public void SetName(string str)
+    {
+        this.name = str.Split();
+    }
+
+    public void SetBirthYear(string str)
+    {
+        this.birthYear = str;
+    }
+
+    public void SetAdress(string str)
+    {
+        this.adress = str.Split(',');
+    }
+
+    public void SetMotherName(string str)
+    {
+        this.motherName = str;
+    }
+
+    public void SetFatherName(string str)
+    {
+        this.fatherName = str;
+    }
+
+
+}
+
+
+
+class Program
+{
+    public static void AddStudent(Student[] students, string student, int n)
+{
+    string[] data = student.Split(',');
+    students[n] = new Student(data[0], data[1], data[2], data[3], data[4]);
+}
+    static void Main(string[] args)
+    {
+        bool flag = false;
+        Student[] students = new Student[0];
+
+        System.Console.WriteLine("Выберите действие:\n 1 - заполнить журнал\n 2 - изменить данные\n 3 - поиск учеников\n 4 - выход");
+        int ans = int.Parse(Console.ReadLine());
+
+        while (ans != 4)
+        {
+            switch(ans)
+            {
+                case 1:
+                    if (flag)
+                    {
+                        System.Console.WriteLine("Вы уже внесли данные учеников");
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("Введите количество учеников в классе:");
+                        int n = int.Parse(Console.ReadLine());
+                        students = new Student[n];
+
+                        for (int i = 0; i < n; i++)
+                        {
+                            System.Console.WriteLine("Введите данные ученика");
+                            string stud = Console.ReadLine();
+                            AddStudent(students, stud, i);
+                        }
+
+                        flag = true;
+                    }
+                    break;
+                
+                case 2:
+                    if (flag)
+                    {
+                        bool notFound = true;
+
+                        while (notFound)
+                        {
+                            System.Console.WriteLine("Введите фамилию ученика, данные которого требуется изменить:");
+                            string surname = Console.ReadLine();
+                        }
+                        
+
+                        bool isFound = false;
+                        Student toChange;
+
+                        foreach(Student el in students)
+                        {
+                            if (el.name[0] == surname)
+                            {
+                                toChange = el;
+                                isFound = true;
+                            }
+                        }
+
+                        if 
+
+
+
+
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("Вы не внесли данные учеников");
+                    }
+                    break;
+
+                default:
+                    System.Console.WriteLine("Неизвестная команда, попробуйте еще раз");
+                    break;
+
+            }
+        }
+
+
+    }
+}
