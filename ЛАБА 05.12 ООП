@@ -6,11 +6,11 @@ namespace lab2111;
 
 class Student(string name, string birthYear, string adress, string motherName = "-", string fatherName = "-")
 {
-    public string[] name = name.Split();
-    string birthYear = birthYear;
-    string motherName = motherName;
-    string fatherName = fatherName;
-    string[] adress = adress.Split(',');
+    public string name = name;
+    public string birthYear = birthYear;
+    public string motherName = motherName;
+    public string fatherName = fatherName;
+    public string adress = adress;
 
     public void ShowInfo()
     {
@@ -19,7 +19,7 @@ class Student(string name, string birthYear, string adress, string motherName = 
 
     public void SetName(string str)
     {
-        this.name = str.Split();
+        this.name = str;
     }
 
     public void SetBirthYear(string str)
@@ -29,7 +29,7 @@ class Student(string name, string birthYear, string adress, string motherName = 
 
     public void SetAdress(string str)
     {
-        this.adress = str.Split(',');
+        this.adress = str;
     }
 
     public void SetMotherName(string str)
@@ -50,10 +50,48 @@ class Student(string name, string birthYear, string adress, string motherName = 
 class Program
 {
     public static void AddStudent(Student[] students, string student, int n)
-{
-    string[] data = student.Split(',');
-    students[n] = new Student(data[0], data[1], data[2], data[3], data[4]);
-}
+    {
+        string[] data = student.Split(", ");
+        students[n] = new Student(data[0], data[1], data[2], data[3], data[4]);
+    }
+
+
+    public static void FindStudent(Student[] students, string s, int n)
+    {
+        int count = 0;
+        foreach(Student el in students)
+        {
+            if(n == 1)
+            {
+                if (el.name.StartsWith(s))
+                {
+                    el.ShowInfo();
+                    count++;
+                }
+            }
+            if (n == 2)
+            {
+                if (el.adress.Contains(s))
+                {
+                    el.ShowInfo();
+                    count++;
+                }
+            }
+            if (n == 3)
+            {
+                if (el.birthYear == s)
+                {
+                    el.ShowInfo();
+                    count++;
+                }
+            }
+        }
+
+        if (count == 0)
+        {
+            System.Console.WriteLine("Ученики не найдены");
+        }
+    }
     static void Main(string[] args)
     {
         bool flag = false;
@@ -82,9 +120,11 @@ class Program
                             System.Console.WriteLine("Введите данные ученика");
                             string stud = Console.ReadLine();
                             AddStudent(students, stud, i);
+                            students[i].ShowInfo();
                         }
 
                         flag = true;
+                        break;
                     }
                     break;
                 
@@ -92,30 +132,68 @@ class Program
                     if (flag)
                     {
                         bool notFound = true;
+                        Student toChange = students[0];
 
                         while (notFound)
                         {
                             System.Console.WriteLine("Введите фамилию ученика, данные которого требуется изменить:");
                             string surname = Console.ReadLine();
-                        }
-                        
+                            
 
-                        bool isFound = false;
-                        Student toChange;
-
-                        foreach(Student el in students)
-                        {
-                            if (el.name[0] == surname)
+                            foreach(Student el in students)
                             {
-                                toChange = el;
-                                isFound = true;
+                                if (el.name.Contains(surname))
+                                {
+                                    toChange = el;
+                                    notFound = false;
+                                }
+                            
                             }
+
+                            if (notFound == false)
+                            {
+                                break;
+                            }
+                            System.Console.WriteLine("Не получилось найти ученика, проверьте корректность ввода");
+                            surname = Console.ReadLine();
+
                         }
 
-                        if 
+                        System.Console.WriteLine("Какие данные вы хотите изменить?\n1 - ФИО\n2 - год рождения\n3 - адрес\n4 - фио матери\n5 - фио отца");
+                        int nChange = int.Parse(Console.ReadLine());
 
+                        switch(nChange)
+                        {
+                            case 1:
+                                System.Console.WriteLine("Введите новые данные:");
+                                string s = Console.ReadLine();
+                                toChange.SetName(s);
+                                break;
+                            case 2:
+                                System.Console.WriteLine("Введите новые данные:");
+                                s = Console.ReadLine();
+                                toChange.SetBirthYear(s);
+                                break;
+                            case 3:
+                                System.Console.WriteLine("Введите новые данные:");
+                                s = Console.ReadLine();
+                                toChange.SetAdress(s);
+                                break;
+                            case 4:
+                                System.Console.WriteLine("Введите новые данные:");
+                                s = Console.ReadLine();
+                                toChange.SetMotherName(s);
+                                break;
+                            case 5:
+                                System.Console.WriteLine("Введите новые данные:");
+                                s = Console.ReadLine();
+                                toChange.SetFatherName(s);
+                                break;
+                        }
 
-
+                        System.Console.WriteLine("Обновленные данные:");
+                        toChange.ShowInfo();
+        
 
                     }
                     else
@@ -124,11 +202,38 @@ class Program
                     }
                     break;
 
+                case 3:
+                    System.Console.WriteLine("По какому параметру провести поиск?\n1 - фамилия\n2 - улица проживания\n3 - год рождения");
+                    int find = int.Parse(Console.ReadLine());
+
+                    switch(find)
+                    {
+                        case 1:
+                            System.Console.WriteLine("Введите первую букву фамилии:");
+                            string surname = Console.ReadLine();
+                            FindStudent(students, surname, find);
+                            break;
+                        case 2:
+                            System.Console.WriteLine("Введите название улицы:");
+                            string street = Console.ReadLine();
+                            FindStudent(students, street, find);
+                            break;
+                        case 3:
+                            System.Console.WriteLine("Введите год рождения:");
+                            string year = Console.ReadLine();
+                            FindStudent(students, year, find);
+                            break;
+                    }
+                    break;
+
                 default:
                     System.Console.WriteLine("Неизвестная команда, попробуйте еще раз");
                     break;
 
             }
+
+            System.Console.WriteLine("Выберите действие:\n 1 - заполнить журнал\n 2 - изменить данные\n 3 - поиск учеников\n 4 - выход");
+            ans = int.Parse(Console.ReadLine());
         }
 
 
