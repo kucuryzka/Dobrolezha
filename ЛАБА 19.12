@@ -1,0 +1,138 @@
+namespace labDob;
+
+
+public class Train
+{
+    public int trainNumber;
+    public string arrive;
+    public string departure;
+    public int[] time = new int[2];
+    
+    public Train(int trainNumber, string arrive, string departure, string time)
+    {
+        this.trainNumber = trainNumber;
+        this.arrive = arrive;
+        this.departure = departure;
+        
+        string[] arr = time.Split(':');
+        this.time[0] = int.Parse(arr[0]);
+        this.time[1] = int.Parse(arr[1]);
+
+    }
+
+
+    public void ShowInfo()
+    {
+        System.Console.WriteLine($"Номер: {trainNumber} Станция отправления: {departure} Станция прибытия: {arrive} Время отправления: {time[0]}:{time[1]}");
+    }
+}
+
+
+public class Station
+{
+    string name;
+    Train[] trains = new Train[3];
+
+
+    public Station(string name, Train[] trains)
+    {
+        this.name = name;
+        this.trains = trains;
+    }
+
+}
+
+class Program
+{
+    public static void FindArrive(string arriveStation, Train[] arr)
+    {
+        foreach(Train train in arr)
+        {
+            if (train.arrive == arriveStation)
+            {
+                train.ShowInfo();
+            }
+        }
+    }
+
+
+    public static void FindTime(string time, Train[] arr)
+    {
+        int hours = int.Parse(time.Split(':')[0]);
+        int minutes = int.Parse(time.Split(':')[1]);
+
+        foreach(Train train in arr)
+        {
+            if (train.time[0] >= hours)
+            {
+                if (train.time[1] >= minutes)
+                {
+                    train.ShowInfo();
+                }
+            }
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        System.Console.WriteLine("Добро пожаловать на вокзал! Пожалуйста, введите команду:");
+        System.Console.WriteLine("1) Ввод информации о поездах\n 2) Вывод информации о поездах, идущих до заданного пункта\n 3) Поезда, отправляющиеся после заданного времени\n 4) Выход");
+
+        Train[] trains = new Train[3];
+        int ans = int.Parse(Console.ReadLine());
+
+        bool flag = false;
+        while (ans != 4)
+        {
+            switch(ans)
+            {
+                case 1:
+                System.Console.WriteLine("Введите данные о поезде через ;");
+                for (int i = 0; i < 3; i++)
+                {
+                    string[] data = Console.ReadLine().Split(';');
+
+                    trains[i] = new Train(int.Parse(data[0]), data[1], data[2], data[3]);
+                }
+
+                flag = true;
+
+
+                Station station = new Station("Станция 1", trains);
+                break;
+
+                case 2:
+                if (flag)
+                {
+                    System.Console.WriteLine("Введите станцию назначения:");
+
+                    string arriveStation = Console.ReadLine();
+
+                    FindArrive(arriveStation, trains);
+                }
+                else
+                {
+                    System.Console.WriteLine("Вы не ввели информацию о поездах");
+                }
+                break;
+
+                case 3:
+                if (flag)
+                {
+                    System.Console.WriteLine("Введите время отправления:");
+                    string departureTime = Console.ReadLine();
+
+                    FindTime(departureTime, trains);
+                }
+                else
+                {
+                    System.Console.WriteLine("Вы не ввели информацию о поездах");
+                }
+                break;
+            }
+
+            System.Console.WriteLine("1) Ввод информации о поездах\n 2) Вывод информации о поездах, идущих до заданного пункта\n 3) Поезда, отправляющиеся после заданного времени\n 4) Выход");
+            ans = int.Parse(Console.ReadLine());
+        }
+    }
+}
