@@ -1,0 +1,193 @@
+using System.Data.Common;
+using System.Dynamic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.Marshalling;
+
+namespace labDob;
+
+
+class Animal
+{
+    public string name;
+}
+
+
+class Bird : Animal
+{
+    public string location;
+    public string winterLocation;
+
+
+    public Bird(string name, string location, string winterLocation)
+    {
+        this.name = name;
+        this.location = location;
+        this.winterLocation = winterLocation;
+    }
+}
+
+
+class Mammal : Animal
+{
+    public string location;
+    public int weight;
+
+    public Mammal(string name, string location, int weight)
+    {
+        this.name = name;
+        this.location = location;
+        this.weight = weight;
+    }
+}
+
+
+class Program
+{
+
+    static void FindBirds(string param, string s, Bird[] birds)
+    {
+        switch (param)
+        {
+            case "1":
+            foreach(Bird el in birds)
+            {
+                if (el.location == s)
+                {
+                    System.Console.WriteLine(el.name);
+                }
+            }
+            break;
+
+            case "2":
+            foreach(Bird el in birds)
+            {
+                if (el.winterLocation == s)
+                {
+                    System.Console.WriteLine(el.name);
+                }
+            }
+            break;
+        }
+    }
+
+
+    static void FindMammals(string param, string s, Mammal[] mammals)
+    {
+        switch (param)
+        {
+            case "1":
+            foreach(Mammal el in mammals)
+            {
+                if (el.location == s)
+                {
+                    System.Console.WriteLine(el.name);
+                }
+            }
+            break;
+
+            case "2":
+            foreach(Mammal el in mammals)
+            {
+                if (el.weight >= int.Parse(s))
+                {
+                    System.Console.WriteLine(el.name);
+                }
+            }
+            break;
+        }
+    }
+    static void Main(string[] args)
+    {
+        Bird[] birds = new Bird[3];
+        Mammal[] mammals = new Mammal[3];
+
+        bool flagBirds = false;
+        bool flagMammals = false;
+
+        System.Console.WriteLine("Введите команду:\n 1) Заполнить информацию о птицах\n 2) Заполнить информацию о млекопитающих\n 3) Поиск птиц\n 4) Поиск млекопитающих\n 5) Выход");
+
+        string ans = Console.ReadLine();
+        while (ans != "5")
+        {
+            switch (ans)
+            {
+                case "1":
+                for (int i = 0; i < 3; i++)
+                {
+                    string[] data = Console.ReadLine().Split();
+
+                    birds[i] = new Bird(data[0], data[1], data[2]);
+                }
+
+                flagBirds = true;
+
+                break;
+
+                case "2":
+                for (int i = 0; i < 3; i++)
+                {
+                    string[] data = Console.ReadLine().Split();
+
+                    mammals[i] = new Mammal(data[0], data[1], int.Parse(data[2]));
+                }
+
+                flagMammals = true;
+                break;
+
+                case "3":
+                if (flagBirds)
+                {
+                    System.Console.WriteLine("Выберите параметр для поиска:\n 1) Место обитания\n 2) Место зимовки");
+                    string param = Console.ReadLine();
+
+                    switch (param)
+                    {
+                        case "1":
+                        System.Console.WriteLine("Введите место обитания");
+                        FindBirds(param, Console.ReadLine(), birds);
+                        break;
+
+                        case "2":
+                        System.Console.WriteLine("Введите место зимовки");
+                        FindBirds(param, Console.ReadLine(), birds);
+                        break;
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("Вы не ввели информацию про птиц");
+                }
+                break;
+
+                case "4":
+                if (flagMammals)
+                {
+                    System.Console.WriteLine("Выберите параметр для поиска:\n 1) Место обитания\n 2) Вес");
+                    string param = Console.ReadLine();
+
+                    switch (param)
+                    {
+                        case "1":
+                        System.Console.WriteLine("Введите место обитания");
+                        FindMammals(param, Console.ReadLine(), mammals);
+                        break;
+
+                        case "2":
+                        System.Console.WriteLine("Введите вес");
+                        FindMammals(param, Console.ReadLine(), mammals);
+                        break;
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("Вы не ввели информацию про млекопитающих");
+                }
+                break;
+            }
+
+            System.Console.WriteLine("Введите команду:\n 1) Заполнить информацию о птицах\n 2) Заполнить информацию о млекопитающих\n 3) Поиск птиц\n 4) Поиск млекопитающих\n 5) Выход");
+
+            ans = Console.ReadLine();
+        }
+    }
+}
