@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace oaip_test
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+
+            int numMin = 999999;
+            double priceMin = 99999;
+            for (int i = 0; i < n; i++)
+            {
+                string[] arr = Console.ReadLine().Split(' ');
+
+                double x1 = double.Parse(arr[0]);
+                double y1 = double.Parse(arr[1]);
+                double z1 = double.Parse(arr[2]);
+
+                double x2 = double.Parse(arr[3]);
+                double y2 = double.Parse(arr[4]);
+                double z2 = double.Parse(arr[5]);
+
+                double price1 = double.Parse(arr[6]);
+                double price2 = double.Parse(arr[7]);
+
+                double volume1 = x1 * y1 * z1;
+                double s1 = 2 * (x1 * y1 + x1 * z1 + y1 * z1);
+
+                double volume2 = x2 * y2 * z2;
+                double s2 = 2 * (x2 * y2 + x2 * z2 + y2 * z2);
+
+                double res1 = price1 - (price2 * s1 / s2);
+                double res2 = volume1 - (volume2 * s1 / s2);
+                double res = res1 / res2;
+
+                if (res < priceMin)
+                {
+                    numMin = i + 1;
+                    priceMin = res;
+                }
+            }
+
+            Console.WriteLine($"{numMin} {Math.Round(priceMin * 1000, 2)}");
+        }
+    }
+}
