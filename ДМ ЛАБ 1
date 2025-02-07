@@ -1,0 +1,55 @@
+void createMatrix(int n, ref int[,] matrix)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i, j] = int.Parse(Console.ReadLine());
+        }
+    }
+}
+
+
+int n = int.Parse(Console.ReadLine());
+int[,] matrix = new int[n, n];
+
+createMatrix(n, ref matrix);
+
+List<int> dots = Enumerable.Range(1, n).ToList();
+
+int currentPart = 1;
+Dictionary<int, HashSet<int>> parts = new Dictionary<int, HashSet<int>>();
+
+
+while (dots.Count != 0)
+{
+    int current = dots[0];
+    parts[currentPart] = new HashSet<int>();
+    parts[currentPart].Add(current);
+
+    List<int> arr = new List<int>{current};
+
+    while (arr.Count != 0)
+    {
+        int current2 = arr[0];
+        for (int i = 0; i < n; i++)
+        {
+            if (matrix[current2 - 1, i] == 1)
+            {
+                if (dots.Contains(i + 1))
+                {
+                    parts[currentPart].Add(i + 1);
+                    arr.Add(i + 1);
+                    dots.Remove(i + 1);
+                }
+            }
+        }
+        dots.Remove(current2);
+        arr.Remove(current2);
+        if (dots.Count == 0) { break; }
+    }
+
+    currentPart++;
+}
+
+Console.WriteLine(parts.Count);
