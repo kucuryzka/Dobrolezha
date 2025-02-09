@@ -1,0 +1,134 @@
+using System.Xml;
+
+internal class Program
+{
+    class PhoneBook
+    {
+        List<User> users = new List<User>();
+
+
+        public void AddUser(User user)
+        {
+            users.Add(user);
+        }
+
+        public void FindOperator(string op)
+        {
+            foreach (User user in users)
+            {
+                foreach (string[] el in user.data)
+                {
+                    if (el.Contains(op))
+                    {
+                        Console.WriteLine(user.name);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        public void FindYear(string op)
+        {
+            foreach (User user in users)
+            {
+                foreach (string[] el in user.data)
+                {
+                    if (el.Contains(op))
+                    {
+                        Console.WriteLine($"{user.name}, {el[0]}, {el[1]}");
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        public void FindNumber(string op)
+        {
+            foreach (User user in users)
+            {
+                foreach (string[] el in user.data)
+                {
+                    if (el.Contains(op))
+                    {
+                        Console.WriteLine($"{user.name}, {user.city}");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+    class User
+    {
+        public string name, city;
+        public List<string[]> data;
+
+
+        public User(string name, string city, List<string[]> data)
+        {
+            this.name = name;
+            this.city = city;
+            this.data = data;
+        }
+    }
+    private static void Main(string[] args)
+    {
+        PhoneBook phoneBook = new PhoneBook();
+
+        Console.WriteLine("Здравствуйте! Это телефонный справочник. Пожалуйста, выберите подходящую опцию: \n1. Добавить абонента \n2. Поиск информации \n3. Выход");
+        string ans = Console.ReadLine();
+
+        while (ans != "3")
+        {
+            if (ans == "1")
+            {
+                Console.WriteLine("Добавление нового абонента. Введите ФИО:");
+                string name = Console.ReadLine();
+
+                Console.WriteLine("Введите город проживания:");
+                string city = Console.ReadLine();
+
+                Console.WriteLine("Ввод информации о зарегистрированных номерах. Сколько номеров зарегистрировано на абонента?");
+                int numbers = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Введите информацию в формате: *номер телефона* *оператор* *год регистрации*");
+                List<string[]> data = new List<string[]>();
+
+                for (int i = 0; i < numbers; i++)
+                {
+                    data.Add(Console.ReadLine().Split());
+                }
+
+                phoneBook.AddUser(new User(name, city, data));
+            }
+            if (ans == "2")
+            {
+                Console.WriteLine("По какому параметру совершить поиск?\n1. По оператору \n2. По году подключения \n3. По номеру телефона \n");
+                string ans2 = Console.ReadLine();
+
+                if (ans2 == "1")
+                {
+                    Console.WriteLine("Введите название оператора:");
+                    phoneBook.FindOperator(Console.ReadLine());
+                }
+                if (ans2 == "2")
+                {
+                    Console.WriteLine("Введите год:");
+                    phoneBook.FindYear(Console.ReadLine());
+                }
+                if (ans2 == "3")
+                {
+                    Console.WriteLine("Введите номер телефона:");
+                    phoneBook.FindNumber(Console.ReadLine());
+                }
+            }
+
+            Console.WriteLine("Пожалуйста, выберите подходящую опцию: \n1. Добавить абонента \n2. Поиск информации \n3. Выход");
+            ans = Console.ReadLine();
+        }
+
+    }
+}
