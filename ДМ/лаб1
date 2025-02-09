@@ -1,0 +1,114 @@
+void createMatrix(int n, ref int[,] matrix)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i, j] = int.Parse(Console.ReadLine());
+        }
+    }
+}
+
+void alg1()
+{int n = int.Parse(Console.ReadLine());
+int[,] matrix = new int[n, n];
+
+createMatrix(n, ref matrix);
+
+List<int> dots = Enumerable.Range(1, n).ToList();
+
+int currentPart = 1;
+Dictionary<int, HashSet<int>> parts = new Dictionary<int, HashSet<int>>();
+
+
+while (dots.Count != 0)
+{
+    int current = dots[0];
+    parts[currentPart] = new HashSet<int>();
+    parts[currentPart].Add(current);
+
+    List<int> arr = new List<int>{current};
+
+    while (arr.Count != 0)
+    {
+        int current2 = arr[0];
+        for (int i = 0; i < n; i++)
+        {
+            if (matrix[current2 - 1, i] == 1)
+            {
+                if (dots.Contains(i + 1))
+                {
+                    parts[currentPart].Add(i + 1);
+                    arr.Add(i + 1);
+                    dots.Remove(i + 1);
+                }
+            }
+        }
+        dots.Remove(current2);
+        arr.Remove(current2);
+        if (dots.Count == 0) { break; }
+    }
+
+    currentPart++;
+}
+
+    Console.WriteLine(parts.Count);
+}
+
+
+void alg2()
+{
+    int n = int.Parse(Console.ReadLine());
+
+    int[,] matrix = new int[n, n];
+    createMatrix(n, ref  matrix);
+
+    int currentPart = 1;
+
+    Dictionary<int, List<int>> dict = new Dictionary<int, List<int>>();
+    for (int i = 0; i < n; i++)
+    {
+        dict[i + 1] = new List<int>();
+    }
+
+    dict[1].Add(currentPart);
+
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            if (matrix[i, j] == 1)
+            {
+                dict[i + 1] = dict[i + 1].Concat(dict[j + 1]).ToList();
+                dict[i + 1] = (dict[i + 1].Distinct().ToList());
+            }
+        }
+
+        if (dict[i + 1].Count == 0)
+        {
+            currentPart++;
+            dict[i + 1].Add(currentPart);
+        }
+
+        if (dict[i + 1].Count > 1)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                List <int> summ = dict[i + 1].Intersect(dict[j + 1]).ToList();
+                if (summ.Count != 0)
+                {
+                    dict[j + 1] = new List<int>{dict[i + 1].Min()};
+                }
+            }
+            dict[i + 1] = new List<int> { dict[i + 1].Min() };
+        }
+    }
+
+    foreach (var el in dict)
+    {
+        Console.WriteLine($"{el.Key} - {el.Value[0]}");
+    }
+}
+
+
+alg2();
