@@ -1,0 +1,90 @@
+using System.Drawing;
+
+public class Shape
+{
+    public string name;
+}
+
+
+interface IShape
+{
+    double getPerimeter(double x);
+    double getArea(double x);
+}
+
+
+class Triangle : Shape, IShape
+{
+    float side;
+    public Triangle(float x)
+    {
+        side = x;
+        name = "triangle";
+    }
+
+    public double getPerimeter(double y)
+    {
+        return side * 3;
+    }
+
+    public double getArea(double y)
+    {
+        return (Math.Sqrt(3) * side * side) / 4;
+    }
+}
+
+
+class Square : Shape, IShape
+{
+    float side;
+    public Square(float x)
+    {
+        side = x;
+        name = "square";
+    }
+
+    public double getPerimeter(double y)
+    {
+        return side * 4;
+    }
+
+    public double getArea(double y)
+    {
+        return side * side;
+    }
+}
+
+
+class Circle : Shape, IShape
+{
+    float radius;
+    public Circle(float x)
+    {
+        radius = x;
+        name = "circle";
+    }
+
+    public double getPerimeter(double y)
+    {
+        return 2 * Math.PI * radius;
+    }
+
+    public double getArea(double y)
+    {
+        return Math.PI * radius * radius;
+    }
+}
+
+internal class Program
+{ 
+    private static void Main(string[] args)
+    {
+        Triangle triangle = new Triangle(5);
+        Square square = new Square(4);
+        Circle circle = new Circle(10);
+
+        Console.WriteLine($"triangle: perimeter = {triangle.getPerimeter}, area = {triangle.getArea}");
+        Console.WriteLine($"square: perimeter = {square.getPerimeter}, area = {square.getArea}");
+        Console.WriteLine($"triangle: perimeter = {circle.getPerimeter}, area = {circle.getArea}");
+    }
+}
