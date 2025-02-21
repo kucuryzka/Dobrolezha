@@ -1,0 +1,112 @@
+internal class Program
+{
+
+    static List<int[]> alg1(int n, ref int[,] matrix)
+    {
+        
+        int summ = 0;
+        List<int> arr = new List<int> { 1 };
+        List<int[]> paths = new List<int[]>();
+
+        List<int[]> bridges = new List<int[]>();
+
+        createMatrix(n, ref matrix);
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (matrix[i, j] != 0)
+                {
+                    paths.Add([i, j, matrix[i, j]]);
+                }
+            }
+        }
+
+        paths = paths.OrderBy(x => x[2]).ToList();
+
+        while (arr.Count < n)
+        {
+            List<int[]> paths2 = paths.Where(item => arr.Contains(item[0])).ToList();
+            for (int i = 0; i < paths2.Count; i++)
+            {
+                if (arr.Contains(paths2[i][0]) && !arr.Contains(paths2[i][1]))
+                {
+                    arr.Add(paths2[i][1]);
+                    summ += paths2[i][2];
+                    bridges.Add(paths2[i]);
+                    break;
+                }
+            }
+        }
+
+        return bridges;
+    }
+
+
+    static int CountParts(int n, ref int[,] matrix)
+    {
+        List<int> dots = Enumerable.Range(1, n).ToList();
+
+        int currentPart = 1;
+        Dictionary<int, HashSet<int>> parts = new Dictionary<int, HashSet<int>>();
+
+
+        while (dots.Count != 0)
+        {
+            int current = dots[0];
+            parts[currentPart] = new HashSet<int>();
+            parts[currentPart].Add(current);
+
+            List<int> arr = new List<int> { current };
+
+            while (arr.Count != 0)
+            {
+                int current2 = arr[0];
+                for (int i = 0; i < n; i++)
+                {
+                    if (matrix[current2 - 1, i] != 0)
+                    {
+                        if (dots.Contains(i + 1))
+                        {
+                            parts[currentPart].Add(i + 1);
+                            arr.Add(i + 1);
+                            dots.Remove(i + 1);
+                        }
+                    }
+                }
+                dots.Remove(current2);
+                arr.Remove(current2);
+                if (dots.Count == 0) { break; }
+            }
+
+            currentPart++;
+        }
+
+        return parts.Count;
+    }
+
+    private static void Main(string[] args)
+    {
+        int n = int.Parse(Console.ReadLine());
+        int[,] matrix = new int[n, n];
+
+        createMatrix(n, ref matrix);
+
+        List<int[]> arr = alg1(n, ref matrix);
+        foreach (int[] path in arr)
+        {
+            int[,] cMatrix = new int[n, n];
+            matrix.CopyTo(cMatrix, 0);
+
+            cMatrix[path[0], path[1]] = 0;
+            cMatrix[path[1], path[0]] = 0;
+
+            int res = CountParts(n, ref cMatrix);
+            if (res > 1)
+            {
+                Console.WriteLine($"ребро ({path[0]},{path[1]}) - мост");
+            }
+        }
+    }
+}
