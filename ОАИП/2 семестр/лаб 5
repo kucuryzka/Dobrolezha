@@ -1,0 +1,40 @@
+class Telephone
+{
+    public string name, number, host, plan;
+    public Telephone(string name, string number, string host, string plan)
+    {
+        this.name = name;
+        this.number = number;
+        this.host = host;
+        this.plan = plan;
+    }
+}
+
+
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        List<Telephone> list = new List<Telephone>();
+        Dictionary<string, int> dict = new Dictionary<string, int>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            string name = Console.ReadLine();
+            string number = Console.ReadLine();
+            string host = Console.ReadLine();
+            string plan = Console.ReadLine();
+
+            list.Add(new Telephone(name, number, host, plan));
+            dict[host] = 0;
+        }
+
+        foreach (Telephone el in list)
+        {
+            dict[el.host]++;
+        }
+
+        var max = dict.Max();
+        Console.WriteLine(max.Key);
+    }
+}
