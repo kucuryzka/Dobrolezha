@@ -1,0 +1,112 @@
+internal class Program
+{
+    void Polka()
+    {
+        string s = Console.ReadLine();
+
+        Stack<int> numbers = new Stack<int>();
+        Stack<string> signs = new Stack<string>();
+
+        foreach (string el in s.Split())
+        {
+            if ("+-*/".Contains(el))
+            {
+                signs.Push(el);
+            }
+            else
+            {
+                int n = int.Parse(el);
+                numbers.Push(n);
+            }
+        }
+
+        if (numbers.Count > 1 && signs.Count > 0)
+        {
+            int num1 = numbers.Pop();
+            int num2;
+
+            while (numbers.Count > 0 && signs.Count > 0)
+            {
+                num2 = numbers.Pop();
+                var sign = signs.Pop();
+                Console.WriteLine($"{num1} {sign} {num2}");
+
+                switch (sign)
+                {
+                    case "+":
+                        num1 = num1 + num2;
+                        break;
+                    case "-":
+                        num1 = num1 - num2;
+                        break;
+                    case "*":
+                        num1 = num1 * num2;
+                        break;
+                    case "/":
+                        if (num2 != 0)
+                        {
+                            num1 = num1 / num2;
+                        }
+                        else
+                        {
+                            Console.WriteLine("0 fraction error");
+                        }
+                        break;
+                }
+            }
+            if (signs.Count == 0 && numbers.Count == 0)
+            {
+                Console.WriteLine($"res = {num1}");
+            }
+            else
+            {
+                Console.WriteLine($"error");
+            }
+        }
+        else
+        {
+            Console.WriteLine("empty stack");
+        }
+    }
+
+
+    void CountFrequency()
+    {
+        HashSet<int> numbers = new HashSet<int>();
+        Dictionary<int, int> dict = new Dictionary<int, int>();
+
+        int n = int.Parse(Console.ReadLine());
+        for (int i = 0; i < n; i++)
+        {
+            int value = int.Parse(Console.ReadLine());
+
+            numbers.Add(value);
+            if (dict.ContainsKey(value))
+            {
+                dict[value]++;
+            }
+            else
+            {
+                dict[value] = 1;
+            }
+        }
+
+        Console.Write("numbers: ");
+        foreach(int el in numbers)
+        {
+            Console.Write($"{el} ");
+        }
+        Console.WriteLine();
+
+        foreach(var el in dict)
+        {
+            Console.WriteLine($"number: {el.Key}, count: {el.Value}");
+        }
+    }
+        
+
+    private static void Main(string[] args)
+    {
+
+    }
+}
