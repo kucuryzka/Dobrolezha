@@ -1,0 +1,56 @@
+class Program
+{
+    class Ariphmetic
+    {
+        public double num1, num2, res;
+        public Ariphmetic(double num1, double num2)
+        {
+            this.num1 = num1;
+            this.num2 = num2;
+        }
+
+        public void Summ() { num1 = num1 + num2; }
+
+        public void Diff() { num1 = num1 - num2; }
+
+        public void Mult() { num1 =  num1 * num2; }
+
+        public void Div()
+        {
+            if (num2 != 0)
+            {
+                num1 = num1 / num2;
+            }
+            else 
+            {
+                Console.WriteLine("error");
+            }
+        }
+    }
+
+
+
+    private static void Main(string[] args)
+    {
+        Ariphmetic obj1 = new Ariphmetic(2, 5);
+        Ariphmetic obj2 = new Ariphmetic(3, 3);
+
+        Del d1 = obj1.Summ;
+        d1 += obj1.Mult;
+        d1 += obj1.Div;
+        d1.Invoke();
+        Console.WriteLine($"delegate 1 res: {obj1.num1}");
+
+        Del d2 = obj2.Div;
+        d2 += obj2.Diff;
+        d2 += obj2.Mult;
+        d2.Invoke();
+        Console.WriteLine($"delegate 2 res: {obj2.num1}");
+
+
+    }
+
+
+    public delegate void Del();
+
+}
