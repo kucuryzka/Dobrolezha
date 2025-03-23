@@ -1,0 +1,65 @@
+class Car
+{
+    public bool isClean;
+    public int year;
+    public string model, color;
+
+    public Car(int  year, string model, string color, bool isClean)
+    {
+        this.year = year;
+        this.model = model;
+        this.color = color;
+        this.isClean = isClean;
+    }
+
+}
+
+
+class Garage 
+{
+    public List<Car> cars = new List<Car>();
+
+    public void addCar(Car car)
+    {
+        cars.Add(car);
+
+    }
+
+}
+
+
+class WashingStation
+{
+
+    public static void washCar(Car car)
+    {
+        car.isClean = true;
+    }
+}
+
+
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        Garage garage = new Garage();
+        Car car1 = new Car(1999, "lada", "black", false);
+        Car car2 = new Car(2002, "bmw", "white", true);
+
+        garage.addCar(car1);
+        garage.addCar(car2);
+
+        CarDelegate del = WashingStation.washCar;
+
+        foreach (Car car in garage.cars)
+        {
+            if (!car.isClean)
+            {
+                del(car);
+            }
+        }
+    }
+}
+
+
+delegate void CarDelegate(Car car);
