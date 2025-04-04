@@ -1,0 +1,67 @@
+using System.Security.Cryptography.X509Certificates;
+
+class Point
+{
+    public delegate void OutOfBounceHandler();
+    public event OutOfBounceHandler? OutOfBounce;
+
+    public int x, y;
+    public Random random = new Random();
+
+    public Point(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void Move(Field field)
+    {
+        x = random.Next(-200, 200);
+        y = random.Next(-200, 200);
+
+        if (x > field.topRight.x || x < field.topLeft.x || y > field.topRight.y || y < field.bottomRight.y)
+        {
+            OutOfBounce?.Invoke();
+        }
+    }
+}
+
+
+class Field
+{
+    public Point topRight, topLeft, bottomRight, bottomLeft;
+    public Field(Point topRight, Point topLeft, Point bottomRight, Point bottomLeft)
+    {
+        this.topRight = topRight;
+        this.topLeft = topLeft;
+        this.bottomRight = bottomRight;
+        this.bottomLeft = bottomLeft;
+    }
+    
+}
+
+
+
+
+internal class Program
+{
+    public static void ErrorMessage()
+    {
+        Console.WriteLine("the point is out of bounce");
+    }
+
+
+    private static void Main(string[] args)
+    {
+        Point point = new Point(50, 50);
+        Field field = new Field(new Point(100, 100), new Point(0, 100), new Point(100, 0), new Point(0, 0));
+
+        point.OutOfBounce += ErrorMessage;
+
+        while (true)
+        {
+            point.Move(field);
+            System.Threading.Thread.Sleep(1000);
+        }
+    }
+}
