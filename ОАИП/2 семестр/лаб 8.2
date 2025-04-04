@@ -1,0 +1,64 @@
+using System.Security.Cryptography.X509Certificates;
+
+public class Horse
+{
+    public delegate void FinishHandler(string name);
+    public event FinishHandler Finish;
+
+    string name;
+    double x;
+    public static bool hasFinished = false;
+
+    public Horse(string name)
+    {
+        this.name = name;
+        this.x = 0;
+    }
+
+    public void Move(int speed, int time, int fin)
+    {
+        x += speed * time;
+        if (x >= fin)
+        {
+            Finish?.Invoke(name);
+        }
+    }
+}
+
+
+internal class Program
+{
+    public static void FinishMessage(string name)
+    {
+        Console.WriteLine($"horse named {name} has finished the race");
+        Horse.hasFinished = true;
+    }
+
+
+    private static void Main(string[] args)
+    {
+        int timeInterval = 10;
+        bool flag = true;
+        Random random = new Random();
+        int fin = 1000;
+
+        List<Horse> list = new List<Horse>();
+
+        for (int i = 0; i < 2; i++)
+        {
+            Horse horse = new Horse(Console.ReadLine());
+            horse.Finish += FinishMessage;
+            list.Add(horse);
+        }
+
+        while (!Horse.hasFinished)
+        {
+            foreach (Horse horse in list)
+            {
+                horse.Move(random.Next(1, 10), timeInterval, fin);
+            }
+            System.Threading.Thread.Sleep(1000);
+
+        }
+    }
+}
