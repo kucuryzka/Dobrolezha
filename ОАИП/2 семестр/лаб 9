@@ -1,0 +1,27 @@
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        ///арифметические операции
+        int n1 = 5, n2 = 6;
+
+        Math math = (int x, int y) =>
+            {
+                Console.WriteLine(x + y);
+                Console.WriteLine(x - y);
+                Console.WriteLine(x * y);
+
+                if (y != 0) { Console.WriteLine(x / y); } else { Console.WriteLine("error"); }
+            };
+        ///
+
+
+        ///фильтр массива
+        List<string> arr = new List<string>();
+        
+        List<string> arr2 = arr.Where(x => x.StartsWith("м")).ToList();
+        ///
+    }
+
+    delegate void Math(int n1, int n2);
+}
