@@ -1,0 +1,33 @@
+public class Array<T>
+{
+    List<T> list { get; set; }
+
+    public Array() 
+    {
+        list = new List<T>();
+    }
+
+    public void AddList(T item)
+    {
+        list.Add(item);
+    }
+
+    public void DeleteItem(T item)
+    {
+        list.Remove(item);
+    }
+
+    public T GetItem(int index)
+    { 
+        return list[index];
+    }
+}
+
+
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+
+    }
+}
