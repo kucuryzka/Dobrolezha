@@ -1,0 +1,42 @@
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        StreamReader sr = new StreamReader("C:\\Users\\olegh\\source\\repos\\oaip_lab12\\oaip_lab12\\file.txt");
+        StreamWriter sw = new StreamWriter("C:\\Users\\olegh\\source\\repos\\oaip_lab12\\oaip_lab12\\file1.txt");
+
+        string nums = "0123456789"; 
+        string line = sr.ReadLine();
+        while (line != null)
+        {
+            string s = line;
+            string n = "";
+            foreach (char el in s)
+            {
+                if (nums.Contains(el))
+                {
+                    n += el;
+                }
+                else
+                {
+                    if (n.Count() > 0)
+                    {
+                        int num = int.Parse(n);
+                        if (num > 10 && num % 2 == 0)
+                        {
+                            sw.WriteLine(line);
+                            break;
+                        }
+
+                        n = "";
+                    }
+                }
+            }
+            line = sr.ReadLine();
+        }
+
+        sr.Close();
+        sw.Close();
+
+    }
+}
