@@ -1,0 +1,66 @@
+internal class Program
+{
+    public struct Book
+    {
+        public string name;
+        public string authors_name;
+        public string publication_date;
+        public string publication_agency;
+        public List<string[]> dates = new List<string[]>();
+
+        public Book(string name, string authors_name, string publication_date, string publication_agency)
+        {
+            this.name = name;
+            this.authors_name = authors_name;
+            this.publication_date = publication_date;
+            this.publication_agency = publication_agency;
+        }
+
+        public void giveBook(string from, string to)
+        {
+            dates.Add(new string[] {from, to });
+        }
+
+    }
+
+
+    public class Library
+    {
+        public List<Book> books = new List<Book>();
+
+        public void addBook(Book book)
+        {
+            books.Add(book);
+        }
+
+        public void findNotGivenBooks(Book book)
+        {
+            foreach (Book el in books)
+            {
+                if (el.dates.Count == 0)
+                {
+                    Console.WriteLine($"{el.name}");
+                }
+            }
+        }
+
+        public void findNotReturnedBooks(Book book)
+        {
+            foreach (Book el in books)
+            {
+                foreach (string[] s in el.dates)
+                {
+                    if (s[1] == "-")
+                    {
+                        Console.WriteLine($"{el.name}");
+                    }
+                }
+            }
+        }
+    }
+    private static void Main(string[] args)
+    {
+
+    }
+    
+}
