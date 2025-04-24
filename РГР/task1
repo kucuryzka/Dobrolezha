@@ -1,0 +1,55 @@
+int n = int.Parse(Console.ReadLine());
+
+List<int[]> points = new List<int[]>();
+for  (int i = 0; i < n; i++)
+{
+    string[] p = Console.ReadLine().Split();
+    int[] angles = new int[2];
+
+    for (int j = 1; j < 3; j++)
+    {
+        string el = p[j];
+        el = el.Replace("~", " ").Replace("'", " ").Replace("\"", "");
+        string[] split = el.Split(" ");
+
+        int num = int.Parse(split[0]);
+        int angle;
+        if (int.Parse(split[0]) < 0)
+        {
+            angle = num * 3600 - int.Parse(split[1]) * 60 - int.Parse(split[2]);
+        }
+        else
+        {
+            angle = num * 3600 + int.Parse(split[1]) * 60 + int.Parse(split[2]);
+           
+        }
+
+        if (j == 1)
+        {
+            angle = (angle % 1296000 + 1296000) % 1296000;
+        }
+
+        angles[j - 1] = angle;
+    }
+    
+    points.Add(angles);
+}
+
+List<int[]> pairs = new List<int[]>();
+for (int i = 0; i < points.Count; i++)
+{
+
+    for (int j = i + 1; j < points.Count; j++)
+    {
+        if ((points[i][0] + 180 * 3600 == points[j][0] || points[i][0] - 180 * 3600 == points[j][0]) && (points[i][1] + points[j][1]) % 1296000 == 0)
+        {
+            pairs.Add(new int[] { i + 1, j + 1});
+        }
+    }
+}
+
+Console.WriteLine(pairs.Count);
+for  (int i = 0;i < pairs.Count; i++)
+{
+    Console.WriteLine($"{pairs[i][0]}-{pairs[i][1]}");
+}
