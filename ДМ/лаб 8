@@ -1,0 +1,244 @@
+int[,] createMatrix(int n)
+{
+    int[,] matrix = new int[n, n];
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i, j] = int.Parse(Console.ReadLine());
+        }
+    }
+
+    return matrix;
+}
+
+
+double[,] matrixFromFile(int n)
+{
+    double[,] matrix = new double[n, n];
+
+    StreamReader reader = new StreamReader("C:\\Users\\olegh\\source\\repos\\alg_little\\alg_little\\matrix.txt");
+    for (int i = 0; i < n; i++)
+    {
+        string[] line = reader.ReadLine().Split();
+        for (int j = 0; j < n; j++)
+        {
+            double num = double.Parse(line[j]);
+            if (num == 999)
+            {
+                num = double.PositiveInfinity;
+            }
+
+            matrix[i, j] = num;
+        }
+    }
+
+    return matrix;
+}
+void printMatrix(ref double[,] matrix, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            Console.Write($"{matrix[i, j]} ");
+        }
+        Console.WriteLine();
+    }
+}
+
+
+int reduceRows(ref double[,] matrix, int n)
+{
+    int[] rowMins = new int[n];
+    for (int i = 0; i < n; i++) { rowMins[i] = 9999; }
+
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0;j < n; j++)
+        {
+            if (matrix[i, j] < rowMins[i])
+            {
+                rowMins[i] = (int)matrix[i, j];
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i, j] -= rowMins[i];
+        }
+    }
+
+    
+    return rowMins.Where(x => x != 9999).Sum();
+}
+
+
+int reduceColumns(ref double[,] matrix, int n)
+{
+    int[] columnMins = new int[n];
+    for (int i = 0; i < n; i++) { columnMins[i] = 9999; }
+
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (matrix[j, i] < columnMins[i])
+            {
+                columnMins[i] = (int)matrix[j, i];
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[j, i] -= columnMins[i];
+        }
+    }
+
+    return columnMins.Where(x => x != 9999).Sum();
+}
+
+
+void evaluateZeroes(ref double[,] matrix, ref int[,] zeroes, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (matrix[i, j] == 0)
+            {
+                double rowMin = 9999;
+                double columnMin = 9999;
+
+                for (int k = 0; k < n; k++)
+                {
+                    if (matrix[i, k] < rowMin && k != j)
+                    {
+                        rowMin = matrix[i, k];
+                    }
+
+                    if (matrix[k, j] <  columnMin && k != i)
+                    {
+                        columnMin = matrix[k, j];
+                    }
+                }
+
+                zeroes[i, j] =(int) (rowMin + columnMin);
+            }
+        }
+    }
+}
+
+
+void findCycle(ref List<int> path, ref List<List<int>> free_pieces, List<int> edge)
+{
+    if (path.Count == 0)
+    {
+        path = path.Concat(edge).ToList();
+    }
+    else
+    {
+        free_pieces.Add(edge);
+    }
+
+    for (int i = 0; i < free_pieces.Count; i++)
+    {
+        if (free_pieces[i][^1] == path[0])
+        {
+            path = free_pieces[i].Concat(path).ToList();
+            path = path.Distinct().ToList();
+            free_pieces[i] = new List<int> { -1, -1};
+        }
+        if (free_pieces[i][0] == path[^1])
+        {
+            path = path.Concat(free_pieces[i]).ToList();
+            path = path.Distinct().ToList();
+            free_pieces[i] = new List<int> { -1, -1 };
+        }
+    }
+}
+
+int n = int.Parse(Console.ReadLine());
+int size = n;
+double[,] matrix = matrixFromFile(n);
+int total = 0;
+
+List<int> path = new List<int>();
+List<List<int>> free_pieces = new List<List<int>>();
+
+while (size > 2)
+{
+    printMatrix(ref matrix, n);
+    Console.WriteLine();
+
+    total += reduceRows(ref matrix, n);
+    total += reduceColumns(ref matrix, n);
+
+    int[,] zeroes = new int[n, n];
+    int bannedRow = -1, bannedColumn = -1, maxValue = -1;
+    evaluateZeroes(ref matrix, ref zeroes, n);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (zeroes[i, j] != null)
+            {
+                if (zeroes[i, j] > maxValue)
+                {
+                    maxValue = zeroes[i, j];
+                    bannedRow = i;
+                    bannedColumn = j;
+                }
+            }
+        }
+    }
+
+    matrix[bannedColumn, bannedRow] = double.PositiveInfinity;
+    findCycle(ref path, ref free_pieces, new List<int> { bannedRow, bannedColumn});
+    matrix[path[^1], path[0]] = double.PositiveInfinity;
+
+    size--;
+    for (int i = 0; i < n; i++) 
+    { 
+        for (int j =0; j < n; j++)
+        {
+            if (i == bannedRow || j == bannedColumn)
+            {
+                matrix[i, j] = double.PositiveInfinity;
+            }
+        }
+    }
+
+
+}
+
+printMatrix(ref matrix, n);
+
+
+total += reduceRows(ref matrix, n);
+total += reduceColumns(ref matrix, n);
+for  (int i = 0; i < n; i++)
+{
+    for (int j = 0;j < n; j++)
+    {
+        if (matrix[i, j] != double.PositiveInfinity)
+        {
+            findCycle(ref path, ref free_pieces, new List<int> { i, j });
+        }
+    }
+}
+
+Console.WriteLine($"total length = {total}");
+Console.Write("path: ");
+for (int i = 0; i < path.Count; i++)
+{
+    Console.Write($"{path[i] + 1}");
+}
