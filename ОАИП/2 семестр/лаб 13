@@ -1,0 +1,78 @@
+class Phone
+{
+    public string name, year, country;
+
+    public Phone(string name, string year, string country)
+    {
+        this.name = name;
+        this.year = year;
+        this.country = country;
+    }
+}
+
+
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        List<Phone> list = new List<Phone>();
+
+        Console.WriteLine("Добро пожаловать в телефонный справочник. Пожалуйста, выберите опцию: \n 1. добавить телефон \n2.выборка по марке \n3. выборка по году  \n4. выборка по стране \n ");
+        string answer = Console.ReadLine();
+
+        while (answer != "5")
+        {
+            switch (answer)
+            {
+                case "1":
+                    string[] el = Console.ReadLine().Split();
+                    list.Add(new Phone(el[0], el[1], el[2]));
+                    break;
+
+                case "2":
+                    string s = Console.ReadLine();
+                    var selectedPhones = from phone in list
+                                         group phone by phone.name;
+
+                    foreach (var phone in selectedPhones)
+                    {
+                        Console.WriteLine(phone.Key);
+
+                        foreach (var elem in phone)
+                        {
+                            Console.WriteLine(elem.year);
+                        }
+                        Console.WriteLine();
+                    }
+                    break;
+
+                case "4":
+                    s = Console.ReadLine();
+                    selectedPhones = from phone in list
+                                     group phone by phone.country;
+
+                    foreach (var phone in selectedPhones)
+                    {
+                        Console.WriteLine(phone.Key);
+
+                        foreach (var elem in phone)
+                        {
+                            Console.WriteLine(elem.name);
+                        }
+                        Console.WriteLine();
+                    }
+                    break;
+
+                case "3":
+                    s = Console.ReadLine();
+                    var selectedPhone = from phone in list where phone.year == s select phone;
+                    foreach (var phone in selectedPhone)
+                    {
+                        Console.WriteLine(phone.name);
+                    }
+                    break;
+            }
+
+        }
+    }
+}
