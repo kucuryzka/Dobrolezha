@@ -1,0 +1,123 @@
+using System.Linq;
+
+
+class Client
+{
+    public string number;
+    public string company_name;
+    public string phone;
+
+    public Client(string num, string company_name, string phone)
+    {
+        this.number = num;
+        this.company_name = company_name;
+        this.phone = phone;
+    }
+}
+
+
+class Product
+{
+    public string id;
+    public string name;
+
+    public Product(string id, string name)
+    {
+        this.id = id;
+        this.name = name;
+    }
+}
+
+
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        Product[] products = {
+            new Product("001", "book"),
+            new Product("002", "chair"),
+            new Product("003", "table"),
+            new Product("004", "sofa"),
+            new Product("005", "bath"),
+            new Product("006", "apple"),
+        };
+
+        Client[] clients = { 
+            new Client("1", "adidas", "136-458"),
+            new Client("2", "nike", "175-988"),
+            new Client("3", "puma", "118-900"),
+            new Client("4", "asics", "643-978"),
+            new Client("5", "demix", "318-948"),
+        };
+
+        List<string[]> operations = new List<string[]>();
+
+        Console.WriteLine("Выберите опцию:\n1. добавить запись о поступлении/продаже \n2. показать остатки товаров \n3. сгруппировать поставки по поставщикам \n4. сгруппировать по дате продажи \n5. выход");
+        string s = Console.ReadLine();
+        while (s != "5")
+        {
+            switch (s)
+            {
+                case "1":
+                    string[] el = Console.ReadLine().Split();
+                    operations.Add(el);
+                    break;
+
+                case "2":
+                    var stock = from op in operations
+                                group op by op[0] into g
+                                join product in products on g.Key equals product.id
+
+                                let total_bought = (from el in g where (el[2] == "1") select Convert.ToInt32(el[4])).Sum()
+                                let total_sold = (from el in g where (el[2] == "-1") select Convert.ToInt32(el[4])).Sum()
+
+                                select new {name = product.name, remaining = total_bought - total_sold };
+
+                    Console.WriteLine("Товар\t Остаток");
+                    foreach(var elem in stock)
+                    {
+                        Console.WriteLine($"{elem.name}\t {elem.remaining}");
+                    }
+
+                    break;
+
+                case "3":
+                    var group_client = from op in operations
+                                       join client in clients on op[1] equals client.number
+                                       where op[2] == "1"
+                                       group op by client.number;
+
+                    foreach(var elem in group_client)
+                    {
+                        Console.WriteLine($"Поставщик {elem.Key}");
+                        foreach(var p in elem)
+                        {
+                            var find_elem = products.Where(x => x.id == p[0]).ToList();
+                            Console.WriteLine(find_elem[0].name);
+                        }
+                    }
+                    break;
+
+                case "4":
+                    var group_sales = from op in operations
+                                    
+                                      where op[2] == "-1"
+                                      orderby op[4]
+                                      group op by op[3];
+
+                    foreach (var elem in group_sales)
+                    {
+                        Console.WriteLine($"Дата {elem.Key}");
+                        foreach (var p in elem)
+                        {
+                            var find_elem = products.Where(x => x.id == p[0]).ToList();
+                            Console.WriteLine(find_elem[0].name, p[4]);
+                        }
+                    }
+                    break;
+            }
+
+            s = Console.ReadLine();
+        }
+    }
+}
