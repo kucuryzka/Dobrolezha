@@ -1,0 +1,20 @@
+string[] s1 = Console.ReadLine().Split();
+double x1 = double.Parse(s1[0]) * (Math.PI / 180);
+double y1  = double.Parse(s1[1]) * (Math.PI / 180);
+
+string[] s2 = Console.ReadLine().Split();
+double x2 = double.Parse(s2[0]) * (Math.PI / 180);
+double y2  = double.Parse(s2[1]) * (Math.PI / 180);
+
+int r = int.Parse(Console.ReadLine());
+
+double dx = x2 - x1;
+double dy = y2 - y1;
+
+double a = Math.Pow(Math.Sin(dx / 2), 2) + Math.Cos(x1) * Math.Cos(x2) * Math.Pow(Math.Sin(dy / 2), 2);
+a = Math.Min(a, 1.0);
+double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+double d = r * c;
+
+Console.WriteLine(Math.Round(d, 3));
