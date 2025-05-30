@@ -1,0 +1,71 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string[] input = Console.ReadLine().Split();
+        int N = int.Parse(input[0]);
+        int M = int.Parse(input[1]);
+
+        const double INF = double.PositiveInfinity;
+        double[,] dist = new double[N + 1, N + 1];
+
+
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = 1; j <= N; j++)
+            {
+                if (i == j)
+                    dist[i, j] = 0;
+                else
+                    dist[i, j] = INF;
+            }
+        }
+
+  
+        for (int k = 0; k < M; k++)
+        {
+            input = Console.ReadLine().Split();
+            int I = int.Parse(input[0]);
+            int J = int.Parse(input[1]);
+            int L = int.Parse(input[2]);
+
+            if (L < dist[I, J])
+            {
+                dist[I, J] = L;
+                dist[J, I] = L;
+            }
+        }
+
+
+        for (int k = 1; k <= N; k++)
+        {
+            for (int i = 1; i <= N; i++)
+            {
+                for (int j = 1; j <= N; j++)
+                {
+                    if (dist[i, k] + dist[k, j] < dist[i, j])
+                    {
+                        dist[i, j] = dist[i, k] + dist[k, j];
+                    }
+                }
+            }
+        }
+
+
+        double maxDistance = 0;
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = i + 1; j <= N; j++)
+            {
+                if (dist[i, j] > maxDistance && dist[i, j] < INF)
+                {
+                    maxDistance = dist[i, j];
+                }
+            }
+        }
+
+        Console.WriteLine(maxDistance);
+    }
+}
