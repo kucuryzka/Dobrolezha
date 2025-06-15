@@ -1,0 +1,111 @@
+using System;
+
+unsafe struct TreeNode
+{
+    public int Id;
+    public fixed char Name[20];
+    public TreeNode* Left;
+    public TreeNode* Right;
+}
+
+unsafe class BinaryTree
+{
+    private TreeNode* root;
+    private const int MaxSize = 100;
+    private TreeNode[] memoryPool; 
+    private int allocatedCount;
+
+    public BinaryTree()
+    {
+        memoryPool = new TreeNode[MaxSize];
+        allocatedCount = 0;
+        root = null;
+    }
+
+    public void Add(int id, string name)
+    {
+        if (allocatedCount >= MaxSize)
+        {
+            Console.WriteLine("Memory pool exhausted!");
+            return;
+        }
+
+        fixed (TreeNode* nodePtr = &memoryPool[allocatedCount++])
+        {
+            nodePtr->Id = id;
+
+            int i = 0;
+            foreach (char c in name)
+            {
+                if (i >= 19) break;
+                nodePtr->Name[i++] = c;
+            }
+            nodePtr->Name[i] = '\0';
+
+            nodePtr->Left = null;
+            nodePtr->Right = null;
+
+            if (root == null)
+            {
+                root = nodePtr;
+            }
+            else
+            {
+                Insert(root, nodePtr);
+            }
+        }
+    }
+
+    private void Insert(TreeNode* current, TreeNode* newNode)
+    {
+        if (newNode->Id < current->Id)
+        {
+            if (current->Left == null)
+                current->Left = newNode;
+            else
+                Insert(current->Left, newNode);
+        }
+        else
+        {
+            if (current->Right == null)
+                current->Right = newNode;
+            else
+                Insert(current->Right, newNode);
+        }
+    }
+
+    public void Print()
+    {
+        if (root != null)
+            PrintNode(root);
+    }
+
+    private void PrintNode(TreeNode* node)
+    {
+        if (node->Left != null) PrintNode(node->Left);
+
+        Console.Write($"ID: {node->Id}, Name: ");
+        for (int i = 0; i < 20 && node->Name[i] != '\0'; i++)
+            Console.Write(node->Name[i]);
+        Console.WriteLine();
+
+        if (node->Right != null) PrintNode(node->Right);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        BinaryTree tree = new BinaryTree();
+
+        tree.Add(5, "Lion");
+        tree.Add(3, "Tiger");
+        tree.Add(7, "Bear");
+        tree.Add(2, "Cat");
+        tree.Add(4, "Dog");
+
+        Console.WriteLine("Animals in tree:");
+        tree.Print();
+    }
+}
